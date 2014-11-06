@@ -1,30 +1,29 @@
 module.exports = (grunt) ->
 
   grunt.initConfig
-    meta:
-      src: 'src/**/*.js'
-      specs: 'spec/**/*.js'
-
     watch:
-        files: '**/*.coffee'
-        tasks: ['test']
+      files: '**/*.coffee'
+      tasks: ['test']
 
     jasmine:
-      src: '<%= meta.src %>'
+      src: 'js/app/**/*.js'
       options:
-        specs: '<%= meta.specs %>'
-        vendor: 'vendor/js/jasmine-given.js'
+        specs: 'js/spec/**/*.js'
 
     coffee:
       compile:
-        files:
-          'src/kata_src.js': ['src/*.coffee']
-          'spec/kata_spec.js': ['spec/*.coffee']
+        files: [
+          expand: true,         # Enable dynamic expansion.
+          cwd: 'coffee/',       # Src matches are relative to this path.
+          src: ['**/*.coffee'], # Actual pattern(s) to match.
+          dest: 'js/',          # Destination path prefix.
+          ext: '.js'            # Dest filepaths will have this extension.
+        ]
+
 
   grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-contrib-jasmine')
-
 
   grunt.registerTask('test', ['coffee', 'jasmine'])
   grunt.registerTask('default', ['test'])
